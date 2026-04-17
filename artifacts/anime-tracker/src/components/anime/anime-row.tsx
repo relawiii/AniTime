@@ -7,14 +7,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 interface AnimeRowProps {
   title: string;
-  emoji?: string;
   anime: Anime[] | undefined;
   isLoading?: boolean;
   className?: string;
   accent?: boolean;
 }
 
-export function AnimeRow({ title, emoji, anime, isLoading, className = "", accent }: AnimeRowProps) {
+export function AnimeRow({ title, anime, isLoading, className = "", accent }: AnimeRowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -36,10 +35,9 @@ export function AnimeRow({ title, emoji, anime, isLoading, className = "", accen
     >
       {/* Row header */}
       <div className="flex items-center gap-2.5 mb-4 px-5 md:px-10 lg:px-14">
-        {emoji && <span className="text-base leading-none">{emoji}</span>}
         <h2 className="text-base sm:text-lg font-bold text-white">{title}</h2>
         {accent && (
-          <span className="flex h-1.5 w-1.5 ml-0.5">
+          <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-1.5 w-1.5 rounded-full bg-primary opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
           </span>

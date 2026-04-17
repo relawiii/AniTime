@@ -15,15 +15,12 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a]">
-      {/* Hero */}
       <HeroSection anime={trending.data} isLoading={trending.isLoading} />
 
-      {/* Rows */}
       <div className="relative z-10 -mt-12 pb-20 space-y-12">
         {airingToday.data && airingToday.data.length > 0 && (
           <AnimeRow
             title="Airing Today"
-            emoji="📡"
             anime={airingToday.data}
             isLoading={airingToday.isLoading}
             accent
@@ -32,21 +29,18 @@ export default function HomePage() {
 
         <AnimeRow
           title="Trending Now"
-          emoji="🔥"
           anime={trending.data}
           isLoading={trending.isLoading}
         />
 
         <AnimeRow
           title="Popular This Season"
-          emoji="⭐"
           anime={popular.data}
           isLoading={popular.isLoading}
         />
 
         <AnimeRow
           title="Coming Soon"
-          emoji="🗓"
           anime={upcoming.data}
           isLoading={upcoming.isLoading}
         />

@@ -145,6 +145,26 @@ export const ANILIST_QUERIES = {
       }
     }
   `,
+  SEARCH: `
+    query($search: String!, $page: Int = 1, $perPage: Int = 20) {
+      Page(page: $page, perPage: $perPage) {
+        media(search: $search, type: ANIME, sort: SEARCH_MATCH) {
+          id
+          title { romaji english }
+          coverImage { large extraLarge }
+          bannerImage
+          episodes
+          status
+          nextAiringEpisode { airingAt timeUntilAiring episode }
+          externalLinks { site url icon color }
+          popularity
+          averageScore
+          season
+          seasonYear
+        }
+      }
+    }
+  `,
   BY_IDS: `
     query($ids: [Int]!) {
       Page {

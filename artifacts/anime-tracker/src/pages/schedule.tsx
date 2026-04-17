@@ -11,7 +11,7 @@ import { useAppSettings } from "@/hooks/use-app-settings";
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 const SHORT_DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-function getWeekDays(): { label: string; shortLabel: string; date: Date; dayIndex: number }[] {
+function getWeekDays() {
   const today = new Date();
   return Array.from({ length: 7 }, (_, i) => {
     const d = new Date(today);
@@ -20,7 +20,6 @@ function getWeekDays(): { label: string; shortLabel: string; date: Date; dayInde
       label: i === 0 ? "Today" : i === 1 ? "Tomorrow" : DAYS[d.getDay()],
       shortLabel: i === 0 ? "Today" : SHORT_DAYS[d.getDay()],
       date: d,
-      dayIndex: d.getDay(),
     };
   });
 }
@@ -58,14 +57,12 @@ function ScheduleRow({ anime, showJST }: { anime: Anime; showJST: boolean }) {
           : "bg-white/[0.03] border-white/[0.06] hover:bg-white/[0.06] hover:border-white/[0.1]"
       }`}
     >
-      {/* Cover */}
       <img
         src={anime.coverImage.large}
         alt={title}
         className="w-10 h-14 object-cover rounded-lg flex-shrink-0"
       />
 
-      {/* Info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
           {isLive && (
@@ -87,7 +84,6 @@ function ScheduleRow({ anime, showJST }: { anime: Anime; showJST: boolean }) {
         </div>
       </div>
 
-      {/* Countdown + arrow */}
       <div className="flex items-center gap-2 flex-shrink-0">
         <div className="text-right">
           {isLive ? (
@@ -113,7 +109,6 @@ export default function SchedulePage() {
     return [...(trending.data ?? []), ...(upcoming.data ?? [])].filter(a => a.nextAiringEpisode);
   }, [trending.data, upcoming.data]);
 
-  // Build a map from weekday offset (0=today, 1=tomorrow, ...) to anime
   const byOffset = useMemo(() => {
     const map: Record<number, Anime[]> = {};
     for (let i = 0; i < 7; i++) map[i] = [];
@@ -141,24 +136,24 @@ export default function SchedulePage() {
 
   return (
     <div className="pt-20 pb-16 min-h-screen">
-      <div className="max-w-3xl mx-auto px-4 md:px-8">
+      <div className="max-w-3xl mx-auto px-5 md:px-8">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-3 mb-6"
+          className="flex items-center gap-3 mb-7"
         >
           <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
             <Clock className="w-5 h-5 text-primary" />
           </div>
           <div>
             <h1 className="text-2xl font-black text-white">Weekly Schedule</h1>
-            <p className="text-white/40 text-xs mt-0.5">Episode release times in your local timezone</p>
+            <p className="text-white/35 text-xs mt-0.5">Episode release times in your local timezone</p>
           </div>
         </motion.div>
 
         {/* Day tabs */}
-        <div className="flex gap-1.5 mb-6 overflow-x-auto scrollbar-hide pb-1">
+        <div className="flex gap-1.5 mb-7 overflow-x-auto scrollbar-hide pb-1">
           {weekDays.map((day, i) => {
             const count = byOffset[i]?.length ?? 0;
             return (
@@ -188,13 +183,15 @@ export default function SchedulePage() {
             <p className="text-white font-bold text-base">
               {weekDays[selectedDayIdx]?.label}
               {selectedDayIdx > 1 && (
-                <span className="text-white/40 font-normal text-sm ml-2">
+                <span className="text-white/35 font-normal text-sm ml-2">
                   {weekDays[selectedDayIdx]?.date.toLocaleDateString([], { month: "short", day: "numeric" })}
                 </span>
               )}
             </p>
-            <p className="text-white/35 text-xs mt-0.5">
-              {selectedAnime.length === 0 ? "No episodes scheduled" : `${selectedAnime.length} episode${selectedAnime.length > 1 ? "s" : ""} airing`}
+            <p className="text-white/30 text-xs mt-0.5">
+              {selectedAnime.length === 0
+                ? "No episodes scheduled"
+                : `${selectedAnime.length} episode${selectedAnime.length > 1 ? "s" : ""} airing`}
             </p>
           </div>
           {selectedDayIdx === 0 && selectedAnime.some(a => a.nextAiringEpisode && a.nextAiringEpisode.timeUntilAiring <= 0) && (
@@ -221,8 +218,8 @@ export default function SchedulePage() {
               ))
             ) : selectedAnime.length === 0 ? (
               <div className="py-16 text-center">
-                <p className="text-4xl mb-4">🗓</p>
-                <p className="text-white/40 text-sm">No episodes scheduled for this day</p>
+                <p className="text-white/20 text-4xl mb-4 font-black">—</p>
+                <p className="text-white/35 text-sm">No episodes scheduled for this day</p>
               </div>
             ) : (
               selectedAnime.map(anime => (
