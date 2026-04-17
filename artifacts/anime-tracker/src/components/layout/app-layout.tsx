@@ -13,7 +13,7 @@ export function AppLayout({ children }: AppLayoutProps) {
         {children}
       </main>
       <footer className="py-8 text-center text-white/40 text-sm border-t border-white/10">
-        <p>© {new Date().getFullYear()} AniStream. Not a streaming service.</p>
+        <p>© {new Date().getFullYear()} AniTime. Not a streaming service.</p>
         <p className="mt-2">Data provided by AniList.</p>
       </footer>
     </div>
