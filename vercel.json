@@ -1,0 +1,10 @@
+{
+  "buildCommand": "cd artifacts/anime-tracker && pnpm install && pnpm run build",
+  "outputDirectory": "artifacts/anime-tracker/dist",
+  "installCommand": "pnpm install",
+  "framework": null,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+
