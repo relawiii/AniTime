@@ -106,7 +106,9 @@ export default function SchedulePage() {
   const [selectedDayIdx, setSelectedDayIdx] = useState(0);
 
   const allAnime = useMemo(() => {
-    return [...(trending.data ?? []), ...(upcoming.data ?? [])].filter(a => a.nextAiringEpisode);
+    const trendingList = Array.isArray(trending.data) ? trending.data : [];
+    const upcomingList = Array.isArray(upcoming.data) ? upcoming.data : [];
+    return [...trendingList, ...upcomingList].filter(a => a.nextAiringEpisode);
   }, [trending.data, upcoming.data]);
 
   const byOffset = useMemo(() => {
