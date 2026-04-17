@@ -6,7 +6,7 @@ export function useTrendingAnime() {
     queryKey: ["anime", "trending"],
     queryFn: async () => {
       const data = await anilistFetch<{ Page: { media: Anime[] } }>(ANILIST_QUERIES.RELEASING);
-      return data.Page.media;
+      return Array.isArray(data.Page.media) ? data.Page.media : [];
     },
     staleTime: 5 * 60 * 1000, // 5 minutes
     refetchInterval: 5 * 60 * 1000,
@@ -18,7 +18,7 @@ export function useUpcomingAnime() {
     queryKey: ["anime", "upcoming"],
     queryFn: async () => {
       const data = await anilistFetch<{ Page: { media: Anime[] } }>(ANILIST_QUERIES.UPCOMING);
-      return data.Page.media;
+      return Array.isArray(data.Page.media) ? data.Page.media : [];
     },
     staleTime: 5 * 60 * 1000,
   });
@@ -29,7 +29,7 @@ export function usePopularAnime() {
     queryKey: ["anime", "popular"],
     queryFn: async () => {
       const data = await anilistFetch<{ Page: { media: Anime[] } }>(ANILIST_QUERIES.POPULAR);
-      return data.Page.media;
+      return Array.isArray(data.Page.media) ? data.Page.media : [];
     },
     staleTime: 60 * 60 * 1000, // 1 hour
   });
@@ -53,7 +53,7 @@ export function useAnimeByIds(ids: number[]) {
     queryFn: async () => {
       if (ids.length === 0) return [];
       const data = await anilistFetch<{ Page: { media: Anime[] } }>(ANILIST_QUERIES.BY_IDS, { ids });
-      return data.Page.media;
+      return Array.isArray(data.Page.media) ? data.Page.media : [];
     },
     enabled: ids.length > 0,
     staleTime: 5 * 60 * 1000,
@@ -69,7 +69,8 @@ export function useAiringToday() {
       const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 1000;
       const endOfToday = startOfToday + 86400;
 
-      return data.Page.media
+      const media = Array.isArray(data.Page.media) ? data.Page.media : [];
+      return media
         .filter(anime => {
           if (!anime.nextAiringEpisode) return false;
           const airingAt = anime.nextAiringEpisode.airingAt;

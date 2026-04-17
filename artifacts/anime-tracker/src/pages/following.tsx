@@ -8,7 +8,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function FollowingPage() {
   const { follows, isLoading: followsLoading } = useFollowsContext();
-  const followedIds = follows?.map(f => f.animeId) ?? [];
+  const safeFollows = Array.isArray(follows) ? follows : [];
+  const followedIds = safeFollows.map(f => f.animeId);
   const { data: animeList, isLoading: animeLoading } = useAnimeByIds(followedIds);
 
   const isLoading = followsLoading || animeLoading;
@@ -23,9 +24,9 @@ export default function FollowingPage() {
         <div className="flex items-center gap-3 mb-8">
           <Bookmark className="w-6 h-6 text-primary" />
           <h1 className="text-2xl md:text-3xl font-black text-white">My List</h1>
-          {follows && follows.length > 0 && (
+          {safeFollows.length > 0 && (
             <span className="ml-1 bg-primary/20 text-primary text-sm font-bold px-2.5 py-0.5 rounded-full">
-              {follows.length}
+              {safeFollows.length}
             </span>
           )}
         </div>
@@ -39,7 +40,7 @@ export default function FollowingPage() {
               </div>
             ))}
           </div>
-        ) : !follows || follows.length === 0 ? (
+        ) : safeFollows.length === 0 ? (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -60,12 +61,12 @@ export default function FollowingPage() {
           </motion.div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
-            {(animeList ?? []).map((anime, i) => (
+            {(Array.isArray(animeList) ? animeList : []).map((anime, i) => (
               <AnimeCard key={anime.id} anime={anime} index={i} />
             ))}
             {/* Show followed entries without detailed data */}
-            {follows
-              .filter(f => !animeList?.find(a => a.id === f.animeId))
+            {safeFollows
+              .filter(f => !Array.isArray(animeList) || !animeList.find(a => a.id === f.animeId))
               .map((follow, i) => (
                 <Link href={`/anime/${follow.animeId}`} key={follow.id}>
                   <motion.div

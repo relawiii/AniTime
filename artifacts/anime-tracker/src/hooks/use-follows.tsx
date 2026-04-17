@@ -32,7 +32,7 @@ export function FollowsProvider({ children }: { children: React.ReactNode }) {
 
   const isFollowing = useCallback(
     (animeId: number) => {
-      return follows?.some(f => f.animeId === animeId) ?? false;
+      return follows?.some((f: { animeId: number }) => f.animeId === animeId) ?? false;
     },
     [follows]
   );

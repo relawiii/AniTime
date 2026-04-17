@@ -32,7 +32,8 @@ const MAX_NOTIFICATIONS = 50;
 function loadFromStorage(): AppNotification[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
   } catch {
     return [];
   }
@@ -40,7 +41,8 @@ function loadFromStorage(): AppNotification[] {
 
 function saveToStorage(notifications: AppNotification[]) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(notifications.slice(0, MAX_NOTIFICATIONS)));
+    const safeNotifications = Array.isArray(notifications) ? notifications : [];
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(safeNotifications.slice(0, MAX_NOTIFICATIONS)));
   } catch {}
 }
 
@@ -127,10 +129,11 @@ export function NotificationsProvider({ children }: { children: React.ReactNode 
 
   // Schedule browser push notifications and in-app alerts for followed anime
   useEffect(() => {
-    if (!follows || follows.length === 0) return;
+    const safeFollows = Array.isArray(follows) ? follows : [];
+    if (safeFollows.length === 0) return;
     const allAnime = [...(trending.data ?? []), ...(upcoming.data ?? [])];
 
-    follows.forEach(follow => {
+    safeFollows.forEach(follow => {
       const anime = allAnime.find(a => a.id === follow.animeId);
       if (!anime?.nextAiringEpisode) return;
 

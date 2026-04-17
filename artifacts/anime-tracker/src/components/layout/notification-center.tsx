@@ -137,7 +137,7 @@ export function NotificationCenter() {
                     <Check className="w-4 h-4" />
                   </button>
                 )}
-                {notifications.length > 0 && (
+                {safeNotifications.length > 0 && (
                   <button
                     onClick={clearAll}
                     title="Clear all"

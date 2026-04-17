@@ -12,6 +12,7 @@ export function Navbar() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { showJST, setShowJST } = useAppSettings();
   const { follows } = useFollowsContext();
+  const safeFollows = Array.isArray(follows) ? follows : [];
   const [location] = useLocation();
 
   useEffect(() => {
@@ -106,9 +107,9 @@ export function Navbar() {
             <Link href="/following">
               <button className="relative p-2 text-white/50 hover:text-white transition-colors rounded-md hover:bg-white/5">
                 <Bookmark className="w-5 h-5" />
-                {follows && follows.length > 0 && (
+                {safeFollows.length > 0 && (
                   <span className="absolute -top-0.5 -right-0.5 bg-primary text-white text-[9px] font-bold min-w-[16px] h-4 rounded-full flex items-center justify-center px-0.5">
-                    {follows.length > 9 ? "9+" : follows.length}
+                    {safeFollows.length > 9 ? "9+" : safeFollows.length}
                   </span>
                 )}
               </button>

@@ -15,6 +15,7 @@ interface AnimeRowProps {
 
 export function AnimeRow({ title, anime, isLoading, className = "", accent }: AnimeRowProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const safeAnime = Array.isArray(anime) ? anime : [];
 
   const scroll = (direction: "left" | "right") => {
     if (!scrollRef.current) return;
@@ -69,7 +70,7 @@ export function AnimeRow({ title, anime, isLoading, className = "", accent }: An
                   <Skeleton className="h-2.5 w-1/2 mt-1.5 bg-white/5 rounded" />
                 </div>
               ))
-            : anime?.map((a, i) => (
+            : safeAnime.map((a, i) => (
                 <AnimeCard key={a.id} anime={a} index={i} />
               ))}
         </div>
